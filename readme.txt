@@ -6,3 +6,6 @@ Everything was done using python==3.10.11
 steps to download the model
 mkdir demo_models && cd demo_models
 gdown --id 1wWrmopvvdhlBw-cL7EDyih9zn_IJu5Wr -O acoustic.pt
+
+#calculate_confidence_score_acoustic.py has the files related to acoustic model
+#calculate_score_transcribe uses amazon transcribe and stats based on that
