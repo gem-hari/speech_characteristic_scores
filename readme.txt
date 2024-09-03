@@ -9,3 +9,5 @@ gdown --id 1wWrmopvvdhlBw-cL7EDyih9zn_IJu5Wr -O acoustic.pt
 
 #calculate_confidence_score_acoustic.py has the files related to acoustic model
 #calculate_score_transcribe uses amazon transcribe and stats based on that
+#for using transcribe file has to be uploaded to s3 bucket 
+#for using acoustic file has to be in same folder as driver.py
