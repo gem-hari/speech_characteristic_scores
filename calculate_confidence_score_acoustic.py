@@ -25,7 +25,7 @@ def run_acoustic_based(audio_file, device="cpu"):
 
     # Initialize WavLM model and load in pre-trained weights
     model = AcousticModel()
-    model.load_state_dict(torch.load('fine_tuned_models/acoustic.pt', map_location='cpu'))
+    model.load_state_dict(torch.load('demo_models/acoustic.pt', map_location='cpu'))
     model.to(device)
     print('loaded finetuned acoustic model') 
 
