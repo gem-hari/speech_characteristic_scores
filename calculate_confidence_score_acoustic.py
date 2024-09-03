@@ -39,7 +39,7 @@ def run_acoustic_based(audio_file, device="cpu"):
 
 
 
-def calculate_confidence_score_acoustic(audio_path, multi_factor=5):
+def calculate_confidence_score_acoustic(audio_path, multi_factor=7):
     _, preds = run_acoustic_based(audio_path)
     pred_df = pd.DataFrame(preds.cpu(), columns=labels).astype(int)
     pred_df['frame_time'] = [round(i * 0.02, 2) for i in range(pred_df.shape[0])]

@@ -94,7 +94,7 @@ def calculate_confidence_score(data):
   for segment in data['audio_segments']:
     segment_speed_score.append(segment['segment_speed_score'])
     segment_filler_score.append(segment['segment_filler_score'])
-    segment_len_sec = (float(segment['end_time'])- float(segment['start_time']))
+    segment_len_sec.append(float(segment['end_time'])- float(segment['start_time']))
     if last_segment_end_time == -1:
       last_segment_end_time = float(segment['end_time'])
     else:
@@ -105,7 +105,8 @@ def calculate_confidence_score(data):
   data["calculate_pause_score"] = calculate_pause_score(total_pause_sec, segment_len_sec)
   result["mean_speed_score"] = data["mean_speed_score"]*10
   result["mean_filler_score"] = data["mean_filler_score"]*10
-  result["consistency_score"] = data["consistency_score"]*10
+  #result["consistency_score"] = data["consistency_score"]*10
+  #consistency is more suited for monotonicity
   result["calculate_pause_score"] = data["calculate_pause_score"]*10 
   result["segment_wpm_list"] = segment_wpm_list
   return result
