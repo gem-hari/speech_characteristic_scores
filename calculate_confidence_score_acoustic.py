@@ -39,7 +39,7 @@ def run_acoustic_based(audio_file, device="cpu"):
 
 
 
-def calculate_confidence_score_acoustic(audio_path, multi_factor=7):
+def calculate_confidence_score_acoustic(audio_path, multi_factor=7, save_result_df= False):
     _, preds = run_acoustic_based(audio_path)
     pred_df = pd.DataFrame(preds.cpu(), columns=labels).astype(int)
     pred_df['frame_time'] = [round(i * 0.02, 2) for i in range(pred_df.shape[0])]
@@ -47,11 +47,16 @@ def calculate_confidence_score_acoustic(audio_path, multi_factor=7):
     
     result={}
     df = pred_df
+    if save_result_df:
+        df.to_csv(audio_path+"_acoustic_frame_prediction.csv", index=True) 
+        print("Saved frame level prediction at ",audio_path+"_acoustic_frame_prediction.csv")       
     len_df = len(df)
+    
     result["filled_pause_score"] = max(40,((len_df - multi_factor*df["FP"].sum())/len(df))*100)
     result["partial_word_score"] = max(40,((len_df - multi_factor*df["RP"].sum())/len(df))*100)
     result["repetition_score"] = max(40,((len_df - multi_factor*df["RV"].sum())/len(df))*100)
-    result["revision_score"] = max(40,((len_df - multi_factor*df["RS"].sum())/len(df))*100)
+    #revision score is not predicting well
+    #result["revision_score"] = max(40,((len_df - multi_factor*df["RS"].sum())/len(df))*100)
     result["restart_score"] = max(40,((len_df - multi_factor*df["PW"].sum())/len(df))*100)
     return result  
 #print(calculate_confidence_score_acoustic("motivationalsample1.wav"))

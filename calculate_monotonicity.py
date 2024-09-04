@@ -2,7 +2,21 @@ import parselmouth
 import librosa
 import numpy as np
 from parselmouth.praat import call
-def calculate_monotonicity_score(audio_path, sentence_wpm, max_std_wpm=50):
+
+def calculate_consistency_score(speech_rates):
+    values = np.array(speech_rates)
+    min_val = np.min(values)
+    max_val = np.max(values)
+    mean_rate = np.mean(values)
+    std_dev = 0
+    if min_val == max_val:
+        return 10, mean_rate, std_dev
+    min_max_scaled = (values - min_val) / (max_val - min_val)
+    std_dev = np.std(min_max_scaled)
+    consistency_score = 10 * (1 - std_dev)
+    return consistency_score, mean_rate, std_dev
+
+def calculate_monotonicity_score(audio_path, sentence_wpm):
     result ={}
     sound = parselmouth.Sound(audio_path)
     amplitudes = sound.values
@@ -28,13 +42,15 @@ def calculate_monotonicity_score(audio_path, sentence_wpm, max_std_wpm=50):
     #print("MFCC variation is ", mfcc_variation)
 
     #wpm variation
-    wpm_std = np.std(sentence_wpm)
-    wpm_variation = max(100 - (wpm_std/max_std_wpm)*100, 40)
+    #wpm_std = np.std(sentence_wpm)
+    #wpm_variation = max(100 - (wpm_std/max_std_wpm)*100, 40)
+    
+    wpm_segment_variation,_,_ = calculate_consistency_score(sentence_wpm)
     
     result["pitch_variation"] = pitch_variation
     result["energy_variation"] = energy_variation
     result["mfcc_variation"] = mfcc_variation
-    result["wpm_variation"] = wpm_variation
+    result["wpm_variation"] = wpm_segment_variation*10
     return result
     
     
