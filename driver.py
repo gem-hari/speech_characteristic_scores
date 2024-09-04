@@ -17,7 +17,7 @@ def aggregate_json_weight(dict_, dict_weight_=None):
             denominator+=1
     return numerator/denominator
     
-audio_name = "little_nervous_1.mp3"
+audio_name = "full_confidence_1.wav"
 gender = "M"
 
 weight_confidence_transcribe = {"mean_filler_score":3.0, "mean_speed_score":2.0,"calculate_pause_score":2.0}
