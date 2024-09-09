@@ -3,3 +3,5 @@ venv_3_10
 demo_models
 *.mp3
 *.wav
+*.csv
+__pycache__
