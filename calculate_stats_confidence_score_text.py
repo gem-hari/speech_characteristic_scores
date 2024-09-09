@@ -102,13 +102,13 @@ def calculate_confidence_score(data):
   data["mean_speed_score"] = np.mean(segment_speed_score)
   data["mean_filler_score"] = np.mean(segment_filler_score)
   data["consistency_score"],  mean_rate, std_dev= calculate_consistency_score(segment_speed_score)
-  data["calculate_pause_score"] = calculate_pause_score(total_pause_sec, segment_len_sec)
+  data["segment_pause_score"] = calculate_pause_score(total_pause_sec, segment_len_sec)
   
   result["mean_speed_score"] = data["mean_speed_score"]*10
   result["mean_filler_score"] = data["mean_filler_score"]*10
   #result["consistency_score"] = data["consistency_score"]*10
   #consistency is more suited for monotonicity
-  result["calculate_pause_score"] = data["calculate_pause_score"]*10 
+  result["segment_pause_score"] = data["segment_pause_score"]*10 
   result["segment_wpm_list"] = segment_wpm_list
   return result
 

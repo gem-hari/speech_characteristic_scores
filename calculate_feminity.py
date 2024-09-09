@@ -45,8 +45,8 @@ def get_formants_delta_F(sound):
             continue
     return np.array(delta_F)
 #return the musculanity score for delta_f based on logic that lower delta_f is more attractive
-def masculinity_score_delta_f(delta_f, ref_delta_f=1018, ref_score = 75, tolerance=10):
-    if delta_f<ref_delta_f:
+def feminity_score_delta_f(delta_f, ref_delta_f=1030, ref_score = 75, tolerance=10):
+    if delta_f>ref_delta_f:
       ref_score += (abs(delta_f-ref_delta_f)/tolerance) 
     else:
       ref_score -= (abs(delta_f-ref_delta_f)/tolerance) 
@@ -56,12 +56,12 @@ def delta_F_analysis(audio_path):
   sound = parselmouth.Sound(audio_path)
   delta_f = get_formants_delta_F(sound)
   delta_f_mean = np.mean(delta_f)
-  #print("mean delta f ", delta_f_mean)
-  score = masculinity_score_delta_f(delta_f_mean)
+  print("mean delta f ", delta_f_mean)
+  score = feminity_score_delta_f(delta_f_mean)
   return score
 
-def calculate_musculanity(audio_path):
-  deepness_dict= calculate_deepness_attractiveness_praat(audio_path, "M")
+def calculate_feminity(audio_path):
+  deepness_dict= calculate_deepness_attractiveness_praat(audio_path, "F")
   deepness_score = deepness_dict["deepness"]
   delta_f_score = delta_F_analysis(audio_path)
   delta_f_score = min(100,delta_f_score)
@@ -70,11 +70,16 @@ def calculate_musculanity(audio_path):
   #print("deepness score is ", deepness_score)
   #print("delta_f_score is ", delta_f_score)
 
-  musculanity_score = (3*deepness_score+2*delta_f_score)/5
+  feminity_score = (3*deepness_score+2*delta_f_score)/5
   result ={}
   result["deepness_score"] = deepness_score
   result["delta_f_score"] = delta_f_score
-  result["musculanity_score"] = musculanity_score
+  result["feminity_score"] = feminity_score
+
   return result
 
-#print(calculate_musculanity("full_confidence_1.mp3"))
+#print(calculate_feminity("femalevoicesweet.mp3"))
+
+#print(calculate_feminity("female_deep_voice.wav"))
+
+#print(calculate_feminity("femalestutteringsample1.wav"))

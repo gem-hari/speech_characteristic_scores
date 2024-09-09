@@ -4,6 +4,9 @@ import calculate_confidence_score_acoustic
 import confidence_score_transcribe
 import calculate_deepness
 import calculate_monotonicity
+import calculate_strength
+import calculate_musculanity
+import calculate_feminity
 
 def aggregate_json_weight(dict_, dict_weight_=None):
     numerator = 0
@@ -17,8 +20,8 @@ def aggregate_json_weight(dict_, dict_weight_=None):
             denominator+=1
     return numerator/denominator
     
-audio_name = "full_confidence_1.wav"
-gender = "M"
+audio_name = "female_deep_voice.wav"
+gender = "F"
 
 weight_confidence_transcribe = {"mean_filler_score":3.0, "mean_speed_score":2.0,"calculate_pause_score":2.0}
 weight_confidence_acoustic = {"filled_pause_score":2.0,"partial_word_score":2.0,"repetition_score":2.0,"restart_score":1.0}
@@ -49,8 +52,29 @@ deepness_score_final = deepness_score_json['deepness']
 monotonicity_score_final = aggregate_json_weight(monotonicity_score_json, weight_monotonicity)
 
 
+strength_score_json = calculate_strength.calculate_strength(audio_name)
+print("Strength score ", strength_score_json)
+strength_score_final = strength_score_json["strength_score"]
+
+
+if gender=="M":
+    musculanity_score_json = calculate_musculanity.calculate_musculanity(audio_name)
+    print("Masculanity score is ", musculanity_score_json)
+    musculanity_score_final = musculanity_score_json["musculanity_score"]
+else:
+    feminity_score_json = calculate_feminity.calculate_feminity(audio_name)
+    print("Feminity score is ", feminity_score_json)
+    feminity_score_final = feminity_score_json["feminity_score"]
+
 print("Final confidence score acoustic is ", confidence_score_acoustic_final)
 print("Final confidence score statistics is ", confidence_score_transcribe_final)
+
+print("*****Final scores*****")
 print("Final confidence score is ", confidence_score_final)
 print("Final deepness score is ", deepness_score_final)
-print("Final Monotoncity score is ", monotonicity_score_final)
+print("Final Monotonicity score is ", monotonicity_score_final)
+print("Final strength score is ", strength_score_final)
+if gender=="M":
+    print("Final Masculanity score is ", musculanity_score_final)
+else:
+    print("Final Feminity score is ", feminity_score_final)
