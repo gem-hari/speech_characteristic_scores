@@ -7,6 +7,7 @@ import calculate_monotonicity
 import calculate_strength
 import calculate_musculanity
 import calculate_feminity
+import calculate_health
 import time
 import concurrent.futures
 
@@ -41,7 +42,7 @@ print("Total time taken is " , end_time-start_time)
 confidence_score_transcribe_json = confidence_score_transcribe.calculate_score_confidence_transcribe(audio_name)
 print("confidence score transcribe is ", confidence_score_transcribe_json)
 """
-
+#confidence score calculation with parallel processing
 with concurrent.futures.ThreadPoolExecutor() as executor:
     future_acoustic = executor.submit(calculate_confidence_score_acoustic.calculate_confidence_score_acoustic,audio_name)
     future_transcribe = executor.submit(confidence_score_transcribe.calculate_score_confidence_transcribe,audio_name)
@@ -67,11 +68,17 @@ deepness_score_final = deepness_score_json['deepness']
 monotonicity_score_final = aggregate_json_weight(monotonicity_score_json, weight_monotonicity)
 
 
+#strength score
 strength_score_json = calculate_strength.calculate_strength(audio_name)
 print("Strength score ", strength_score_json)
 strength_score_final = strength_score_json["strength_score"]
 
+#health score
+health_score_json = calculate_health.calculate_health(audio_name,strength_score= strength_score_final)
+print("Health score ", health_score_json)
+health_score_final = health_score_json["health_score"]
 
+#masculanity/feminity score
 if gender=="M":
     musculanity_score_json = calculate_musculanity.calculate_musculanity(audio_name)
     print("Masculanity score is ", musculanity_score_json)
@@ -81,6 +88,7 @@ else:
     print("Feminity score is ", feminity_score_json)
     feminity_score_final = feminity_score_json["feminity_score"]
 
+
 print("Final confidence score acoustic is ", confidence_score_acoustic_final)
 print("Final confidence score statistics is ", confidence_score_transcribe_final)
 
@@ -89,6 +97,7 @@ print("Final confidence score is ", confidence_score_final)
 print("Final deepness score is ", deepness_score_final)
 print("Final Monotonicity score is ", monotonicity_score_final)
 print("Final strength score is ", strength_score_final)
+print("Final health score is ", health_score_final)
 if gender=="M":
     print("Final Masculanity score is ", musculanity_score_final)
 else:
